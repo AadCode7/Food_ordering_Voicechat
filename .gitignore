@@ -1,7 +1,10 @@
 __pycache__/
-*.pyc
+*.py[cod]
 .venv/
 local.db
 *.db
 .pytest_cache/
 .vercel/
+.env
+.env.*
+!.env.example

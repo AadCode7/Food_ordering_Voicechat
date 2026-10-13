@@ -68,6 +68,21 @@ def test_fallback_model_then_graceful_degradation(client, auth, monkeypatch):
     assert r["reply"]  # canned reply, no crash
 
 
+
+
+def test_openai_compatible_provider_requires_configuration(monkeypatch):
+    from config.settings import load_settings
+
+    monkeypatch.setenv("LLM_PROVIDER", "openai_compatible")
+    monkeypatch.setenv("LLM_BASE_URL", "https://provider.example/v1")
+    monkeypatch.setenv("LLM_API_KEY", "test-api-key")
+    configured = load_settings()
+    assert configured.llm_enabled is True
+
+    monkeypatch.setenv("LLM_API_KEY", "dummy_api_key")
+    unconfigured = load_settings()
+    assert unconfigured.llm_enabled is False
+
 def test_garbage_llm_output_is_ignored(client, auth, monkeypatch):
     _enable(monkeypatch, lambda url, **kw: _Resp("not json at all"))
     r = _say(client, auth[0], "blorp glorp flibber")

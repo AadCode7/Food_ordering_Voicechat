@@ -10,13 +10,15 @@ from __future__ import annotations
 
 import copy
 import json
+import re
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, TypedDict
 
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, START, StateGraph
 
 from api.models.orm import Order
-from api.services import llm_service, menu_service, profile_service, recommend_service
+from api.services import external_apis, llm_service, menu_service, profile_service, recommend_service
 from logger import get_logger, log_event, span
 from utils import nlp
 from utils.metrics import metrics
@@ -108,6 +110,7 @@ def _route(state: OrderState) -> str:
         "clear_cart": "clear_cart", "recommend": "recommend", "show_menu": "show_menu",
         "place_order": "place_order", "confirm": "confirm", "deny": "deny",
         "set_diet": "set_profile", "set_address": "set_profile",
+        "discover_places": "discover_places", "find_recipes": "find_recipes", "food_buzz": "food_buzz",
     }.get(state["intent"], "smalltalk")
 
 
@@ -211,6 +214,97 @@ def show_menu(state: OrderState, config: RunnableConfig) -> dict:
     return {"reply": "We have " + _join(menu_service.categories()) + ". Ask for a category, or say recommend."}
 
 
+
+def _discovery_query(message: str, intent: str) -> str:
+    """Strip request wording and a trailing location while preserving food/topic terms."""
+    text = message.lower()
+    text = re.sub(r"\b(?:in|near|around)\s+(?:me|my area|here|[a-z][a-z\s,-]{1,50})$", " ", text)
+    patterns = (
+        r"\b(?:what are people saying|can you find|show me|search for|"
+        r"find|search|show|look for|recommend|please|tell me|what are|what is|what'?s|whats|on|is|the|any|good|best|"
+        r"nearby|near me|around me|in my area|restaurants?|food places?|places to eat|food spots|"
+        r"where can i eat|recipes?|how do i cook|how to cook|cooking ideas|reddit|trending|"
+        r"food buzz|popular discussions|about|for|of|in)\b"
+    )
+    text = re.sub(patterns, " ", text)
+    text = re.sub(r"\s+", " ", text).strip(" ,.?")
+    if intent == "discover_places":
+        return text or "restaurants"
+    return text or ("food" if intent == "food_buzz" else "Indian food")
+
+
+def _location_for(state: OrderState) -> str:
+    match = re.search(r"\b(?:in|near|around)\s+([a-z][a-z\s,-]{1,50})$", state["message"], re.I)
+    if match:
+        candidate = match.group(1).strip(" ,.")
+        if candidate.lower() not in {"me", "my area", "here"}:
+            return candidate[:80]
+    return (state["user"].get("address") or "Nashik")[:80]
+
+
+@_node("discover_places")
+def discover_places(state: OrderState, config: RunnableConfig) -> dict:
+    query = _discovery_query(state["message"], "discover_places")
+    location = _location_for(state)
+    # Run both providers concurrently; provider adapters already apply timeouts and fail-soft behavior.
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        google_future = pool.submit(external_apis.google_places, f"{query} in {location}", 3)
+        yelp_future = pool.submit(external_apis.yelp, query, location, 3)
+        google, yelp = google_future.result(), yelp_future.result()
+    combined, seen = [], set()
+    for result in (google, yelp):
+        if not result.get("available"):
+            continue
+        for place in result.get("results", []):
+            name = (place.get("name") or "").strip()
+            if name and name.casefold() not in seen:
+                seen.add(name.casefold())
+                combined.append(place)
+    if not google.get("available") and not yelp.get("available"):
+        return {"reply": "Restaurant discovery is not configured yet. Add Google Places or Yelp credentials to enable it; food ordering still works."}
+    if not combined:
+        return {"reply": f"I couldn't find restaurant results for {query} in {location}. Try another cuisine or location."}
+    lines = []
+    for place in combined[:3]:
+        detail = []
+        if place.get("rating") is not None:
+            detail.append(f'rating {place["rating"]}')
+        if place.get("price"):
+            detail.append(str(place["price"]))
+        if place.get("address"):
+            detail.append(place["address"])
+        lines.append(place["name"] + (f' ({", ".join(detail)})' if detail else ""))
+    return {"reply": f"Here are a few options for {query} in {location}: " + "; ".join(lines) + ". Check current hours and availability before visiting."}
+
+
+@_node("find_recipes")
+def find_recipes(state: OrderState, config: RunnableConfig) -> dict:
+    query = _discovery_query(state["message"], "find_recipes")
+    data = external_apis.spoonacular(query, limit=3)
+    if not data.get("available"):
+        return {"reply": "Recipe search is not configured yet. Add a Spoonacular API key to enable it; local menu recommendations still work."}
+    recipes = [r.get("title") for r in data.get("results", []) if r.get("title")]
+    if not recipes:
+        return {"reply": f"I couldn't find recipes for {query}. Try a simpler ingredient or dish name."}
+    return {"reply": f"Recipe ideas for {query}: " + "; ".join(recipes[:3]) + ". These are recipe suggestions, not items currently available to order."}
+
+
+@_node("food_buzz")
+def food_buzz(state: OrderState, config: RunnableConfig) -> dict:
+    query = _discovery_query(state["message"], "food_buzz")
+    data = external_apis.reddit(query, limit=3)
+    if not data.get("available"):
+        return {"reply": "Food discussion search is not configured yet. Add Reddit API credentials to enable it; local menu recommendations still work."}
+    lines = []
+    for post in data.get("results", [])[:3]:
+        title, url = post.get("title"), post.get("url")
+        if title:
+            lines.append(f"{title}" + (f" ({url})" if url else ""))
+    if not lines:
+        return {"reply": f"I couldn't find food discussions about {query}. Try a different search phrase."}
+    return {"reply": f"Food discussions about {query}: " + "; ".join(lines) + ". Reddit posts are community opinions, not verified restaurant availability."}
+
+
 @_node("place_order")
 def place_order(state: OrderState, config: RunnableConfig) -> dict:
     session = copy.deepcopy(state["session"])
@@ -279,6 +373,7 @@ def smalltalk(state: OrderState, config: RunnableConfig) -> dict:
         return {"reply": f"Hi {first}! What would you like to eat? Try add two butter naan, or recommend something spicy."}
     if intent == "help":
         return {"reply": "You can say: add two butter naan, remove the naan, show my cart, recommend something spicy, "
+                         "find restaurants near Pune, find recipes for paneer, check Reddit for biryani discussions, "
                          "I'm vegetarian, deliver to my address, or place order."}
     if intent == "thanks":
         return {"reply": "You're welcome! Let me know if you want anything else."}
@@ -297,6 +392,7 @@ _HANDLERS = {
     "add_item": add_item, "remove_item": remove_item, "show_cart": show_cart, "clear_cart": clear_cart,
     "recommend": recommend, "show_menu": show_menu, "place_order": place_order, "confirm": confirm,
     "deny": deny, "set_profile": set_profile, "smalltalk": smalltalk,
+    "discover_places": discover_places, "find_recipes": find_recipes, "food_buzz": food_buzz,
 }
 _graph: Any = None
 

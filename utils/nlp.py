@@ -27,7 +27,7 @@ CATEGORY_WORDS = {
 INTENTS = {
     "add_item", "remove_item", "show_cart", "clear_cart", "recommend", "show_menu",
     "place_order", "confirm", "deny", "set_diet", "set_address", "greet", "help",
-    "thanks", "chitchat", "unknown",
+    "thanks", "chitchat", "discover_places", "find_recipes", "food_buzz", "unknown",
 }
 
 _VERBS = (
@@ -47,6 +47,9 @@ _CONFIRM = _P(r"^(yes|yeah|yep|yup|sure|confirm|confirmed|correct|ok|okay|go ahe
 _DENY = _P(r"^(no|nope|nah|nahi|not now|stop|cancel that|don't|do not)\b")
 _PLACE = _P(r"\b(place|confirm|finali[sz]e|submit)\b.*\border\b|\bcheck ?out\b|\border now\b|\bthat'?s (all|it)\b|\bi'?m done\b")
 _CLEAR = _P(r"\b(clear|empty|reset)\b.*\b(cart|order|basket)\b|\bstart over\b|\bcancel (my |the )?order\b")
+_DISCOVER_PLACES = _P(r"\b(restaurants?|food places?|places to eat|food spots|where can i eat|nearby restaurants?)\b")
+_FIND_RECIPES = _P(r"\b(recipes?|how (?:do i|to) cook|cooking ideas)\b")
+_FOOD_BUZZ = _P(r"\b(reddit|trending|food buzz|popular discussions|what are people saying)\b")
 _RECOMMEND = _P(
     r"\b(recommend|recommendation|suggest|suggestion|surprise me|what should i (eat|order|have)|"
     r"what'?s good|i'?m hungry|i am hungry|what do you recommend|something (spicy|sweet|light|cheesy|"
@@ -122,6 +125,13 @@ def parse(raw: str) -> Parsed:
         return Parsed("place_order")
     if _CLEAR.search(t):
         return Parsed("clear_cart")
+    # Specific discovery intents must be checked before generic recommendation/menu rules.
+    if _DISCOVER_PLACES.search(t):
+        return Parsed("discover_places", tags=extract_tags(t))
+    if _FIND_RECIPES.search(t):
+        return Parsed("find_recipes", tags=extract_tags(t))
+    if _FOOD_BUZZ.search(t):
+        return Parsed("food_buzz", tags=extract_tags(t))
     if _RECOMMEND.search(t):
         return Parsed("recommend", tags=extract_tags(t))
     if _MENU.search(t):
