@@ -5,6 +5,7 @@ import sys
 import time
 import uuid
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode
 
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:  # make top-level packages importable on Vercel
@@ -33,8 +34,38 @@ except Exception:  # keep the app up so /api/health can report the problem
 setup_telemetry(app)
 
 
+def restore_vercel_path(scope: dict) -> None:
+    """Restore the original URL path after Vercel rewrites it to /api/index.
+
+    vercel.json passes the incoming path in the internal __path query parameter.
+    This keeps FastAPI routes and /static assets addressable behind the rewrite.
+    """
+    if scope.get("path") != "/api/index":
+        return
+
+    query_string = scope.get("query_string", b"").decode("latin-1")
+    query_items = parse_qsl(query_string, keep_blank_values=True)
+    original_paths = [value for key, value in query_items if key == "__path"]
+    if not original_paths:
+        return
+
+    original_path = original_paths[0]
+    # Only accept an absolute local path; never allow an authority or backslash.
+    if not original_path.startswith("/") or original_path.startswith("//") or "\\" in original_path:
+        return
+
+    scope["path"] = original_path
+    scope["raw_path"] = original_path.encode("utf-8")
+    remaining = [(key, value) for key, value in query_items if key != "__path"]
+    scope["query_string"] = urlencode(remaining, doseq=True).encode("latin-1")
+
+
 @app.middleware("http")
 async def request_logging(request: Request, call_next):
+    # Vercel rewrites requests to the Python function URL. Restore the browser's
+    # original path before Starlette performs route matching.
+    restore_vercel_path(request.scope)
+
     rid = request.headers.get("x-request-id") or uuid.uuid4().hex[:12]
     request_id_var.set(rid)
     start = time.perf_counter()
