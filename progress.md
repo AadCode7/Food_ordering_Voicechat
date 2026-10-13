@@ -34,6 +34,7 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 - [x] Route conversational restaurant, recipe, and food-discussion requests to the existing Google Places, Yelp, Spoonacular, and Reddit adapters
 - [x] Run Google Places and Yelp lookups concurrently; deduplicate restaurant names and gracefully handle missing provider credentials
 - [x] Add parser and mocked chat-flow tests for the three discovery intents
+- [x] Add a GitHub Actions workflow to run automated tests on branch pushes and pull requests
 - [ ] Verify live external-provider calls and tune query extraction using real examples
 - [ ] Verify local Ollama and a chosen OpenAI-compatible provider against the configured model IDs
 - [x] Remove Hugging Face from the configured LLM path; default to rule-based operation and support local Ollama or an explicitly configured OpenAI-compatible endpoint

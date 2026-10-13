@@ -51,7 +51,16 @@ The rule-based parser and ordering flow work without an LLM. Use `LLM_PROVIDER=n
 
 Database initialization currently occurs at application startup. A formal migration workflow is still planned; review schema changes carefully before production deployment.
 
-## 4. API overview
+## 4. Run automated tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q
+```
+
+The repository CI workflow also runs the test suite on pushes to the main/feature branches and on pull requests targeting `main`.
+
+## 5. API overview
 
 | Endpoint | Purpose |
 |---|---|
@@ -63,11 +72,11 @@ Database initialization currently occurs at application startup. A formal migrat
 | `GET /api/discover/places`, `/recipes`, `/buzz` | Optional external discovery sources |
 | `GET /api/health`, `GET /api/metrics` | Health and metrics |
 
-## 5. Conversational discovery
+## 6. Conversational discovery
 
 Ask BiteVoice to **"find restaurants near Pune"**, **"find recipes for paneer"**, or **"what's trending on Reddit about biryani"**. These requests use the configured Google Places/Yelp, Spoonacular, and Reddit adapters. If a provider credential is missing, the chat responds with a setup message and normal ordering remains available. External results are suggestions, not confirmed menu inventory or availability.
 
-## 6. Current limitations
+## 7. Current limitations
 
 - The local menu is sourced from `api/data/menu.json`; a live restaurant menu/order provider is not yet connected.
 - Discovery wrappers exist, but live provider calls require valid credentials and have not been verified in a deployed environment.

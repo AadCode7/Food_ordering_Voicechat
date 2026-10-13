@@ -64,7 +64,7 @@ Configuration is loaded from environment variables, with `.env` used only for lo
 
 `api/services/external_apis.py` contains optional adapters for Google Places, Yelp Fusion, Spoonacular, and Reddit. `api/routes/discover.py` exposes authenticated discovery endpoints. Calls are bounded by timeouts, cached locally, and fail soft when credentials are absent or upstream services fail. Real credentials and production calls have not yet been verified. Results from external sources must be treated as recommendations, not as authoritative menu inventory or guaranteed availability.
 
-Conversational discovery intents are routed by deterministic NLP before generic recommendations: restaurant queries call Google Places and Yelp concurrently, recipe queries call Spoonacular, and food-trend queries call Reddit. The integrations are optional, bounded by the existing adapter timeouts/cache, and return a graceful setup message when credentials are missing. Results are summarized in chat and are not treated as verified inventory, current opening hours, or guaranteed availability.
+Conversational discovery intents are routed by deterministic NLP before generic recommendations. Query cleanup removes common command wording and a trailing location, while preserving cuisine or ingredient terms where possible: restaurant queries call Google Places and Yelp concurrently, recipe queries call Spoonacular, and food-trend queries call Reddit. The integrations are optional, bounded by the existing adapter timeouts/cache, and return a graceful setup message when credentials are missing. Results are summarized in chat and are not treated as verified inventory, current opening hours, or guaranteed availability.
 
 ## 7. Monitoring
 
@@ -90,6 +90,10 @@ utils/                     NLP, cache, metrics, rate limiting, security
 tests/                     Automated application and LLM tests
 ```
 
-## 9. Deployment and validation status
+## 9. Continuous integration and deployment validation
+
+The GitHub Actions test workflow installs `requirements.txt` and `requirements-dev.txt`, then runs `pytest -q` on pushes and pull requests. A green test workflow is a prerequisite for treating the code change as validated; it does not replace live Vercel, Supabase, browser-microphone, or external-provider checks.
+
+## 10. Deployment and validation status
 
 The app is configured for Vercel and Supabase Postgres, but a configuration file alone does not prove a live deployment works. Validate production environment variables, database connectivity, authentication, chat/cart isolation, explicit order confirmation, and third-party APIs in the deployed environment. Schema migrations, shared cache/rate limiting, and live-provider verification remain follow-up work.
