@@ -21,7 +21,13 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 - [x] Removed Hugging Face from the configured LLM path; rule-based operation remains the default
 - [x] Fixed the PostgreSQL driver dependency for SQLAlchemy 2.1 by adding the psycopg v3 binary distribution used by the configured PostgreSQL dialect
 - [x] Added regression tests to verify both explicit `postgresql+psycopg://` and default `postgresql://` URLs can initialize a SQLAlchemy engine
-- [x] Updated architecture and progress documentation with the deployment incident and fix
+- [x] Updated architecture and progress documentation with the PostgreSQL driver incident and fix
+- [x] Fixed Vercel catch-all rewrite handling: preserve the incoming URL path in `__path` and restore it before FastAPI route matching
+- [x] Added regression tests for restoring `/` and static asset paths through the Vercel rewrite
+
+## Deployment follow-up
+
+- [ ] Redeploy the latest `main` commit on Vercel and verify `/`, `/api/health`, and `/static/css/style.css` return expected responses. The route fix is committed, but live deployment verification is still pending.
 
 ## Decisions
 
