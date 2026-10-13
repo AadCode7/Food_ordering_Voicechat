@@ -1,34 +1,44 @@
 # Progress
 
-_Running summary so context is never lost. Last updated: 2026-10-13._
+_Running summary so context can be carried forward. Last updated: 2026-10-13._
 
-## Done
-- [x] Project scaffold and folder structure (api, config, database, logger, prompt_lib, utils)
-- [x] Own JWT auth: sign up, sign in, `/me`, logout; PBKDF2 hashing; rate limits
-- [x] Dashboard with logout, saved address / diet / spice / cuisines
-- [x] Voice UI (Web Speech STT + browser TTS) with text fallback
-- [x] LangGraph ordering agent (understand -> handlers -> finalize) with two-step order confirmation
-- [x] Open-source LLMs only: Qwen2.5-7B primary, Mistral-7B fallback (Hugging Face free / Ollama); rule-based fallback
-- [x] Low token use (rules first, tiny prompts, caching) and low latency
-- [x] Recommendation model (popularity + history + taste + tags, diet filter)
-- [x] Distilled memory in Postgres (diet, frequent items); short-lived session state for the cart; no chat history stored
-- [x] External API wrappers: Google Places, Yelp Fusion, Spoonacular, Reddit (dummy keys -> gracefully disabled)
-- [x] Monitoring: JSON logs, OpenTelemetry traces, `/api/metrics`, `/api/health`
-- [x] Peak-load measures (caching, rate limit, PEAK_MODE, pooler/NullPool)
-- [x] README.md, architecture.md, `.env` with dummy keys, vercel.json
-- [x] 16 automated tests passing; live server smoke test OK
+## Existing functionality reviewed
+
+- [x] FastAPI application and Vercel routing configuration reviewed
+- [x] Existing auth, chat/order graph, menu, recommendation, session, and discovery services reviewed
+- [x] Existing discovery adapters identified for Google Places, Yelp Fusion, Spoonacular, and Reddit
+- [x] Existing local TTL cache and sliding-window limiter identified as process-local
+- [x] Existing architecture and limitations documented
+
+## Completed in this branch
+
+- [x] Created feature branch `feature/production-hardening-and-discovery` from `main`
+- [x] Tightened Git ignore rules so local environment files are not newly committed, while keeping `.env.example` tracked
+- [x] Updated setup instructions to copy `.env.example` to a local `.env` and keep credentials out of source control
+- [x] Removed the tracked `.env` file because it duplicated the placeholder template; configure local and deployed secrets through environment variables
+- [x] Updated architecture documentation to distinguish existing capabilities from planned work and unverified deployment behavior
+- [x] Updated this progress file alongside the implementation documentation
 
 ## Decisions
-No payments (cash on delivery) - English only - Vercel + Supabase Postgres - FastAPI + simple HTML/JS - own JWT auth -
-free open-source LLMs only (Qwen/Mistral) - menu source deferred (local `menu.json` for now) - store only distilled info.
 
-## To do / next
-- [ ] Add real keys (HF token, Supabase URL, Google/Yelp/Spoonacular/Reddit) and deploy to Vercel
-- [ ] Choose and plug in the online menu source (replace `menu_service._load()`)
-- [ ] Use external APIs inside the agent (e.g. "restaurants near me") and show them in the dashboard
-- [ ] Alembic migrations; password reset; email verification
-- [ ] Redis/Upstash for global rate limiting and shared cache; Grafana dashboards for the telemetry
-- [ ] Order history page and order status updates
+- Existing repository remains the project source; changes are isolated on a feature branch to protect the current `main`.
+- Keep FastAPI + simple HTML/CSS/JS + Supabase Postgres + Vercel as the target stack.
+- Preserve deterministic ordering, hard dietary filtering, and explicit order confirmation.
+- Keep LLM calls optional and bounded; do not assume a hosted provider's free tier is unlimited.
+- Store distilled user preferences and order data, not full chat transcripts.
+- Treat third-party discovery results as recommendations, not confirmed menus or availability.
 
-## Notes
-- Not tested here: the Vercel deployment itself, real Hugging Face / Supabase / third-party API calls (no keys, restricted network), and microphone input in a real browser.
+## Next implementation steps
+
+- [ ] Add an optional shared Redis-compatible cache and distributed rate limiter with a safe local fallback
+- [ ] Integrate external discovery results into conversational recommendations without blocking core ordering
+- [ ] Review LLM provider configuration and remove dependence on providers whose free access is unreliable
+- [ ] Add tests for provider failures, cache fallback, cross-user/session isolation, and discovery behavior
+- [ ] Add a database migration workflow and production configuration validation
+- [ ] Run the automated test suite and verify the deployed Vercel + Supabase setup
+
+## Validation status
+
+- The codebase and documentation were inspected through GitHub.
+- Automated tests have **not** been executed in this work session; do not interpret prior repository notes as a fresh test run.
+- Live Vercel deployment, Supabase connectivity, real third-party API calls, and browser microphone behavior have not been verified here.
