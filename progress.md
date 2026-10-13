@@ -10,44 +10,43 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 - [x] Existing local TTL cache and sliding-window limiter identified as process-local
 - [x] Existing architecture and limitations documented
 
-## Completed in this branch
+## Completed on main
 
-- [x] Created feature branch `feature/production-hardening-and-discovery` from `main`
-- [x] Tightened Git ignore rules so local environment files are not newly committed, while keeping `.env.example` tracked
-- [x] Updated setup instructions to copy `.env.example` to a local `.env` and keep credentials out of source control
-- [x] Removed the tracked `.env` file because it duplicated the placeholder template; configure local and deployed secrets through environment variables
-- [x] Updated architecture documentation to distinguish existing capabilities from planned work and unverified deployment behavior
-- [x] Updated this progress file alongside the implementation documentation
+- [x] Hardened Git ignore rules so local environment files are not newly committed, while keeping `.env.example`
+- [x] Removed the tracked `.env` file; local and deployed secrets are configured through environment variables
+- [x] Added an optional Upstash Redis REST cache layer for eligible public/external and recommendation data, with local TTL fallback
+- [x] Added Redis-backed distributed rate limiting with local fallback
+- [x] Routed conversational restaurant, recipe, and food-discussion requests to Google Places, Yelp, Spoonacular, and Reddit adapters
+- [x] Added mocked discovery/LLM/cache/rate-limit tests and GitHub Actions CI
+- [x] Removed Hugging Face from the configured LLM path; rule-based operation remains the default
+- [x] Fixed the PostgreSQL driver dependency for SQLAlchemy 2.1 by adding the psycopg v3 binary distribution used by the configured PostgreSQL dialect
+- [x] Added regression tests to verify both explicit `postgresql+psycopg://` and default `postgresql://` URLs can initialize a SQLAlchemy engine
+- [x] Updated architecture and progress documentation with the deployment incident and fix
 
 ## Decisions
 
-- Existing repository remains the project source; changes are isolated on a feature branch to protect the current `main`.
+- Work directly on `main`; do not create feature branches unless explicitly requested.
 - Keep FastAPI + simple HTML/CSS/JS + Supabase Postgres + Vercel as the target stack.
 - Preserve deterministic ordering, hard dietary filtering, and explicit order confirmation.
 - Keep LLM calls optional and bounded; do not assume a hosted provider's free tier is unlimited.
 - Store distilled user preferences and order data, not full chat transcripts.
 - Treat third-party discovery results as recommendations, not confirmed menus or availability.
+- Use psycopg v3 because the deployed SQLAlchemy PostgreSQL dialect imports `psycopg`; keep psycopg2-binary available for compatibility with any explicit psycopg2 URL.
 
 ## Next implementation steps
 
-- [x] Add an optional Upstash Redis REST cache layer for public/external and recommendation data, with local TTL fallback
-- [x] Add a Redis-backed distributed rate-limit counter using atomic Lua increment/expiry, with local fallback if Redis is unavailable
+- [ ] Verify the new dependency and regression tests in GitHub Actions after this commit
+- [ ] Verify the Vercel deployment starts successfully after redeployment
+- [ ] Verify production Supabase connectivity and authentication/chat/order flows
 - [ ] Verify shared-cache and distributed-limit behavior against a real Upstash database
-- [x] Route conversational restaurant, recipe, and food-discussion requests to the existing Google Places, Yelp, Spoonacular, and Reddit adapters
-- [x] Run Google Places and Yelp lookups concurrently; deduplicate restaurant names and gracefully handle missing provider credentials
-- [x] Add parser and mocked chat-flow tests for the three discovery intents
-- [x] Add a GitHub Actions workflow to run automated tests on branch pushes and pull requests
 - [ ] Verify live external-provider calls and tune query extraction using real examples
-- [ ] Verify local Ollama and a chosen OpenAI-compatible provider against the configured model IDs
-- [x] Remove Hugging Face from the configured LLM path; default to rule-based operation and support local Ollama or an explicitly configured OpenAI-compatible endpoint
-- [ ] Verify a chosen hosted provider's current model IDs, rate limits, and availability before enabling it
-- [ ] Add tests for provider failures, cache fallback, cross-user/session isolation, and discovery behavior
+- [ ] Verify local Ollama and a chosen OpenAI-compatible provider against configured model IDs
+- [ ] Add tests for provider failures, cross-user/session isolation, and discovery behavior
 - [ ] Add a database migration workflow and production configuration validation
-- [x] Run the automated test suite in GitHub Actions for implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684` (passed)
-- [ ] Verify the deployed Vercel + Supabase setup
 
 ## Validation status
 
-- GitHub Actions installed the project dependencies and completed `pytest -q` successfully on implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684`.
-- The test suite includes existing ordering/auth/diet tests plus mocked conversational discovery, optional LLM configuration, shared-cache fallback, and distributed rate-limit coverage.
+- GitHub Actions previously completed `pytest -q` successfully on implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684`.
+- The production error reported from Vercel was `ModuleNotFoundError: No module named 'psycopg'` while SQLAlchemy initialized the PostgreSQL engine.
+- This change adds `psycopg[binary]` and regression coverage for SQLAlchemy engine initialization. A successful GitHub test run and live Vercel redeployment still need confirmation.
 - Live Upstash Redis, Vercel deployment, Supabase connectivity, real third-party API calls, and browser microphone behavior have not been verified here.
