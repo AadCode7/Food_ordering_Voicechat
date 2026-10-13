@@ -30,7 +30,9 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 
 ## Next implementation steps
 
-- [ ] Add an optional shared Redis-compatible cache and distributed rate limiter with a safe local fallback
+- [x] Add an optional Upstash Redis REST cache layer for public/external and recommendation data, with local TTL fallback
+- [x] Add a Redis-backed distributed rate-limit counter using atomic Lua increment/expiry, with local fallback if Redis is unavailable
+- [ ] Verify shared-cache and distributed-limit behavior against a real Upstash database
 - [x] Route conversational restaurant, recipe, and food-discussion requests to the existing Google Places, Yelp, Spoonacular, and Reddit adapters
 - [x] Run Google Places and Yelp lookups concurrently; deduplicate restaurant names and gracefully handle missing provider credentials
 - [x] Add parser and mocked chat-flow tests for the three discovery intents

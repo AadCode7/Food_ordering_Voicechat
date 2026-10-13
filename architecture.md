@@ -55,9 +55,9 @@ Configuration is loaded from environment variables, with `.env` used only for lo
 - **Rule-first processing:** routine cart/menu/order turns use deterministic handlers and avoid LLM calls.
 - **Bounded LLM work:** compact prompts, bounded output tokens, timeouts, response cache, and circuit breaker.
 - **Recommendations:** lightweight scoring based on popularity, prior orders, cuisine, spice, and request tags; dietary restrictions are hard filters.
-- **Cache:** the current TTL/LRU cache is thread-safe but process-local.
-- **Rate limiting:** the current sliding-window limiter is process-local.
-- **Peak events:** longer TTLs can be enabled using `PEAK_MODE`; this helps individual instances but does not provide a global cache or globally consistent rate limits. A shared Redis-compatible service is planned for cross-instance cache and rate-limit coordination.
+- **Cache:** a thread-safe local TTL/LRU cache remains the fast first layer. When Upstash Redis REST credentials are configured, eligible public/recommendation caches are shared across instances; remote failures fall back to local memory.
+- **Rate limiting:** when Upstash is configured, a Redis Lua increment-with-expiry coordinates rate limits across instances. If Redis is unavailable, the existing process-local sliding-window limiter is used.
+- **Peak events:** `PEAK_MODE` extends configured cache TTLs and skips optional LLM chit-chat. Shared cache/rate limits require `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`; Redis calls are bounded by short timeouts and fail soft.
 - **Serverless constraints:** do not rely on in-memory state surviving between invocations. Keep database connections and upstream calls bounded by timeouts.
 
 ## 6. External discovery

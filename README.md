@@ -80,7 +80,7 @@ Ask BiteVoice to **"find restaurants near Pune"**, **"find recipes for paneer"**
 
 - The local menu is sourced from `api/data/menu.json`; a live restaurant menu/order provider is not yet connected.
 - Discovery wrappers exist, but live provider calls require valid credentials and have not been verified in a deployed environment.
-- Cache and rate-limit state are currently process-local, so they are not globally coordinated across serverless instances.
+- Without Upstash credentials, cache and rate-limit state fall back to process-local memory. Configure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to coordinate eligible caches and rate limits across Vercel instances.
 - Production deployment, real Supabase/provider calls, and browser microphone behavior must be tested in their target environments.
 
 See [architecture.md](architecture.md) for design details and [progress.md](progress.md) for implementation status.
