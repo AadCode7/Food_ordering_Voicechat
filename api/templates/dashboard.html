@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - {{ app_name }}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Bite<span style="color:var(--acc)">Voice</span> 🎙️</div>
+    <div class="who"><span id="hello" class="mut"></span><button class="ghost" id="logout" type="button">Log out</button></div>
+  </header>
+  <main class="grid">
+    <section class="col">
+      <div class="card voice">
+        <div class="orb-row">
+          <button id="mic" class="orb" type="button" aria-label="Start or stop listening">🎤</button>
+          <div>
+            <h2 style="margin-bottom:2px">Talk to order</h2>
+            <div class="mut" id="status">Tap the mic and say "add two butter naan".</div>
+            <label class="mut"><input type="checkbox" id="speak" checked style="width:auto;margin:6px 6px 0 0">Speak replies</label>
+          </div>
+        </div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <div class="send">
+          <input id="text" placeholder="…or type here" maxlength="500" autocomplete="off">
+          <button id="send" type="button">Send</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Picked for you</h3>
+        <div class="chips" id="recs"></div>
+      </div>
+    </section>
+    <section class="col">
+      <div class="card">
+        <h3>Your cart</h3>
+        <div id="cart"><div class="mut">Your cart is empty.</div></div>
+        <div class="total"><span>Total</span><span id="total">₹0</span></div>
+        <button id="order" type="button" style="width:100%" disabled>Place order</button>
+      </div>
+      <div class="card">
+        <h3>Saved details</h3>
+        <label class="mut" for="address">Delivery address</label>
+        <textarea id="address" rows="2" maxlength="300"></textarea>
+        <label class="mut" for="diet">Diet</label>
+        <select id="diet"><option value="any">No restriction</option><option value="veg">Vegetarian</option><option value="non-veg">Non-vegetarian</option></select>
+        <label class="mut" for="spice">Spice level</label>
+        <select id="spice"><option value="0">Mild</option><option value="1">Medium</option><option value="2">Hot</option><option value="3">Extra hot</option></select>
+        <label class="mut" for="cuisines">Favourite cuisines (comma separated)</label>
+        <input id="cuisines" placeholder="north-indian, chinese">
+        <button id="save" type="button">Save</button> <span id="saved" class="ok"></span>
+      </div>
+    </section>
+  </main>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

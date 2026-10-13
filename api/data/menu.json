@@ -1,0 +1,567 @@
+{
+ "currency": "INR",
+ "items": [
+  {
+   "id": "paneer-tikka",
+   "name": "Paneer Tikka",
+   "category": "starter",
+   "veg": true,
+   "price": 260,
+   "spice": 2,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "smoky",
+    "crispy"
+   ],
+   "popularity": 0.9,
+   "aliases": [],
+   "description": "Paneer Tikka - north indian starter"
+  },
+  {
+   "id": "veg-spring-rolls",
+   "name": "Veg Spring Rolls",
+   "category": "starter",
+   "veg": true,
+   "price": 180,
+   "spice": 1,
+   "cuisine": "chinese",
+   "tags": [
+    "crispy"
+   ],
+   "popularity": 0.7,
+   "aliases": [
+    "spring roll"
+   ],
+   "description": "Veg Spring Rolls - chinese starter"
+  },
+  {
+   "id": "chicken-65",
+   "name": "Chicken 65",
+   "category": "starter",
+   "veg": false,
+   "price": 290,
+   "spice": 3,
+   "cuisine": "south-indian",
+   "tags": [
+    "spicy",
+    "crispy"
+   ],
+   "popularity": 0.8,
+   "aliases": [],
+   "description": "Chicken 65 - south indian starter"
+  },
+  {
+   "id": "chicken-tikka",
+   "name": "Chicken Tikka",
+   "category": "starter",
+   "veg": false,
+   "price": 310,
+   "spice": 2,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "smoky"
+   ],
+   "popularity": 0.85,
+   "aliases": [],
+   "description": "Chicken Tikka - north indian starter"
+  },
+  {
+   "id": "hara-bhara-kebab",
+   "name": "Hara Bhara Kebab",
+   "category": "starter",
+   "veg": true,
+   "price": 230,
+   "spice": 1,
+   "cuisine": "north-indian",
+   "tags": [
+    "healthy",
+    "light"
+   ],
+   "popularity": 0.6,
+   "aliases": [],
+   "description": "Hara Bhara Kebab - north indian starter"
+  },
+  {
+   "id": "samosa",
+   "name": "Samosa",
+   "category": "snack",
+   "veg": true,
+   "price": 90,
+   "spice": 1,
+   "cuisine": "street-food",
+   "tags": [
+    "crispy",
+    "spicy"
+   ],
+   "popularity": 0.85,
+   "aliases": [
+    "samosas"
+   ],
+   "description": "Samosa - street food snack"
+  },
+  {
+   "id": "vada-pav",
+   "name": "Vada Pav",
+   "category": "snack",
+   "veg": true,
+   "price": 70,
+   "spice": 2,
+   "cuisine": "street-food",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.8,
+   "aliases": [
+    "vadapav"
+   ],
+   "description": "Vada Pav - street food snack"
+  },
+  {
+   "id": "pav-bhaji",
+   "name": "Pav Bhaji",
+   "category": "snack",
+   "veg": true,
+   "price": 160,
+   "spice": 2,
+   "cuisine": "street-food",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.8,
+   "aliases": [
+    "pavbhaji"
+   ],
+   "description": "Pav Bhaji - street food snack"
+  },
+  {
+   "id": "masala-dosa",
+   "name": "Masala Dosa",
+   "category": "main",
+   "veg": true,
+   "price": 150,
+   "spice": 1,
+   "cuisine": "south-indian",
+   "tags": [
+    "crispy",
+    "filling"
+   ],
+   "popularity": 0.85,
+   "aliases": [
+    "dosa"
+   ],
+   "description": "Masala Dosa - south indian main"
+  },
+  {
+   "id": "idli-sambar",
+   "name": "Idli Sambar",
+   "category": "main",
+   "veg": true,
+   "price": 110,
+   "spice": 1,
+   "cuisine": "south-indian",
+   "tags": [
+    "light",
+    "healthy"
+   ],
+   "popularity": 0.7,
+   "aliases": [
+    "idli"
+   ],
+   "description": "Idli Sambar - south indian main"
+  },
+  {
+   "id": "butter-chicken",
+   "name": "Butter Chicken",
+   "category": "main",
+   "veg": false,
+   "price": 340,
+   "spice": 1,
+   "cuisine": "north-indian",
+   "tags": [
+    "creamy",
+    "filling"
+   ],
+   "popularity": 0.95,
+   "aliases": [],
+   "description": "Butter Chicken - north indian main"
+  },
+  {
+   "id": "paneer-butter-masala",
+   "name": "Paneer Butter Masala",
+   "category": "main",
+   "veg": true,
+   "price": 280,
+   "spice": 1,
+   "cuisine": "north-indian",
+   "tags": [
+    "creamy",
+    "filling"
+   ],
+   "popularity": 0.9,
+   "aliases": [
+    "paneer masala"
+   ],
+   "description": "Paneer Butter Masala - north indian main"
+  },
+  {
+   "id": "dal-makhani",
+   "name": "Dal Makhani",
+   "category": "main",
+   "veg": true,
+   "price": 220,
+   "spice": 1,
+   "cuisine": "north-indian",
+   "tags": [
+    "creamy",
+    "filling"
+   ],
+   "popularity": 0.8,
+   "aliases": [
+    "dal"
+   ],
+   "description": "Dal Makhani - north indian main"
+  },
+  {
+   "id": "chole-bhature",
+   "name": "Chole Bhature",
+   "category": "main",
+   "veg": true,
+   "price": 190,
+   "spice": 2,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.75,
+   "aliases": [
+    "chole"
+   ],
+   "description": "Chole Bhature - north indian main"
+  },
+  {
+   "id": "palak-paneer",
+   "name": "Palak Paneer",
+   "category": "main",
+   "veg": true,
+   "price": 260,
+   "spice": 1,
+   "cuisine": "north-indian",
+   "tags": [
+    "healthy"
+   ],
+   "popularity": 0.65,
+   "aliases": [],
+   "description": "Palak Paneer - north indian main"
+  },
+  {
+   "id": "kadai-chicken",
+   "name": "Kadai Chicken",
+   "category": "main",
+   "veg": false,
+   "price": 330,
+   "spice": 3,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy"
+   ],
+   "popularity": 0.7,
+   "aliases": [],
+   "description": "Kadai Chicken - north indian main"
+  },
+  {
+   "id": "mutton-rogan-josh",
+   "name": "Mutton Rogan Josh",
+   "category": "main",
+   "veg": false,
+   "price": 420,
+   "spice": 3,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.65,
+   "aliases": [
+    "rogan josh"
+   ],
+   "description": "Mutton Rogan Josh - north indian main"
+  },
+  {
+   "id": "veg-hakka-noodles",
+   "name": "Veg Hakka Noodles",
+   "category": "main",
+   "veg": true,
+   "price": 190,
+   "spice": 1,
+   "cuisine": "chinese",
+   "tags": [
+    "filling"
+   ],
+   "popularity": 0.7,
+   "aliases": [
+    "hakka noodles",
+    "noodles"
+   ],
+   "description": "Veg Hakka Noodles - chinese main"
+  },
+  {
+   "id": "chicken-biryani",
+   "name": "Chicken Biryani",
+   "category": "rice",
+   "veg": false,
+   "price": 320,
+   "spice": 2,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.95,
+   "aliases": [],
+   "description": "Chicken Biryani - north indian rice"
+  },
+  {
+   "id": "veg-biryani",
+   "name": "Veg Biryani",
+   "category": "rice",
+   "veg": true,
+   "price": 240,
+   "spice": 2,
+   "cuisine": "north-indian",
+   "tags": [
+    "spicy",
+    "filling"
+   ],
+   "popularity": 0.8,
+   "aliases": [],
+   "description": "Veg Biryani - north indian rice"
+  },
+  {
+   "id": "jeera-rice",
+   "name": "Jeera Rice",
+   "category": "rice",
+   "veg": true,
+   "price": 140,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "light"
+   ],
+   "popularity": 0.6,
+   "aliases": [],
+   "description": "Jeera Rice - north indian rice"
+  },
+  {
+   "id": "curd-rice",
+   "name": "Curd Rice",
+   "category": "rice",
+   "veg": true,
+   "price": 120,
+   "spice": 0,
+   "cuisine": "south-indian",
+   "tags": [
+    "light",
+    "cold",
+    "healthy"
+   ],
+   "popularity": 0.5,
+   "aliases": [],
+   "description": "Curd Rice - south indian rice"
+  },
+  {
+   "id": "butter-naan",
+   "name": "Butter Naan",
+   "category": "bread",
+   "veg": true,
+   "price": 60,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "filling"
+   ],
+   "popularity": 0.9,
+   "aliases": [
+    "naan"
+   ],
+   "description": "Butter Naan - north indian bread"
+  },
+  {
+   "id": "garlic-naan",
+   "name": "Garlic Naan",
+   "category": "bread",
+   "veg": true,
+   "price": 70,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "filling"
+   ],
+   "popularity": 0.85,
+   "aliases": [],
+   "description": "Garlic Naan - north indian bread"
+  },
+  {
+   "id": "tandoori-roti",
+   "name": "Tandoori Roti",
+   "category": "bread",
+   "veg": true,
+   "price": 30,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "light"
+   ],
+   "popularity": 0.7,
+   "aliases": [
+    "roti"
+   ],
+   "description": "Tandoori Roti - north indian bread"
+  },
+  {
+   "id": "gulab-jamun",
+   "name": "Gulab Jamun",
+   "category": "dessert",
+   "veg": true,
+   "price": 90,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "sweet"
+   ],
+   "popularity": 0.9,
+   "aliases": [
+    "gulabjamun"
+   ],
+   "description": "Gulab Jamun - north indian dessert"
+  },
+  {
+   "id": "rasmalai",
+   "name": "Rasmalai",
+   "category": "dessert",
+   "veg": true,
+   "price": 120,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "sweet",
+    "creamy",
+    "cold"
+   ],
+   "popularity": 0.75,
+   "aliases": [
+    "ras malai"
+   ],
+   "description": "Rasmalai - north indian dessert"
+  },
+  {
+   "id": "kulfi",
+   "name": "Kulfi",
+   "category": "dessert",
+   "veg": true,
+   "price": 110,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "sweet",
+    "cold",
+    "creamy"
+   ],
+   "popularity": 0.7,
+   "aliases": [],
+   "description": "Kulfi - north indian dessert"
+  },
+  {
+   "id": "sweet-lassi",
+   "name": "Sweet Lassi",
+   "category": "drink",
+   "veg": true,
+   "price": 90,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "sweet",
+    "cold",
+    "creamy"
+   ],
+   "popularity": 0.8,
+   "aliases": [
+    "lassi"
+   ],
+   "description": "Sweet Lassi - north indian drink"
+  },
+  {
+   "id": "mango-lassi",
+   "name": "Mango Lassi",
+   "category": "drink",
+   "veg": true,
+   "price": 110,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "sweet",
+    "cold",
+    "creamy"
+   ],
+   "popularity": 0.8,
+   "aliases": [],
+   "description": "Mango Lassi - north indian drink"
+  },
+  {
+   "id": "masala-chai",
+   "name": "Masala Chai",
+   "category": "drink",
+   "veg": true,
+   "price": 40,
+   "spice": 0,
+   "cuisine": "north-indian",
+   "tags": [
+    "hot"
+   ],
+   "popularity": 0.85,
+   "aliases": [
+    "chai",
+    "tea"
+   ],
+   "description": "Masala Chai - north indian drink"
+  },
+  {
+   "id": "fresh-lime-soda",
+   "name": "Fresh Lime Soda",
+   "category": "drink",
+   "veg": true,
+   "price": 70,
+   "spice": 0,
+   "cuisine": "street-food",
+   "tags": [
+    "cold",
+    "tangy"
+   ],
+   "popularity": 0.65,
+   "aliases": [
+    "lime soda"
+   ],
+   "description": "Fresh Lime Soda - street food drink"
+  },
+  {
+   "id": "cold-coffee",
+   "name": "Cold Coffee",
+   "category": "drink",
+   "veg": true,
+   "price": 100,
+   "spice": 0,
+   "cuisine": "street-food",
+   "tags": [
+    "sweet",
+    "cold"
+   ],
+   "popularity": 0.7,
+   "aliases": [],
+   "description": "Cold Coffee - street food drink"
+  }
+ ]
+}

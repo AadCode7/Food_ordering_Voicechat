@@ -1,18 +1,7 @@
-# Secrets - NEVER commit these
-.env
-.env.*
-!.env.example
-
-# Python
 __pycache__/
 *.pyc
 .venv/
-venv/
+local.db
+*.db
 .pytest_cache/
-.mypy_cache/
-
-# Tooling / deployment
 .vercel/
-.vscode/
-.idea/
-.DS_Store
