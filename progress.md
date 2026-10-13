@@ -43,10 +43,11 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 - [ ] Verify a chosen hosted provider's current model IDs, rate limits, and availability before enabling it
 - [ ] Add tests for provider failures, cache fallback, cross-user/session isolation, and discovery behavior
 - [ ] Add a database migration workflow and production configuration validation
-- [ ] Run the automated test suite and verify the deployed Vercel + Supabase setup
+- [x] Run the automated test suite in GitHub Actions for implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684` (passed)
+- [ ] Verify the deployed Vercel + Supabase setup
 
 ## Validation status
 
-- The codebase was inspected and changes were committed through GitHub.
-- Discovery parser and chat-flow tests were added, but automated tests have **not** been executed in this work session; do not interpret test definitions as passing results.
-- Live Vercel deployment, Supabase connectivity, real third-party API calls, and browser microphone behavior have not been verified here.
+- GitHub Actions installed the project dependencies and completed `pytest -q` successfully on implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684`.
+- The test suite includes existing ordering/auth/diet tests plus mocked conversational discovery, optional LLM configuration, shared-cache fallback, and distributed rate-limit coverage.
+- Live Upstash Redis, Vercel deployment, Supabase connectivity, real third-party API calls, and browser microphone behavior have not been verified here.

@@ -92,7 +92,7 @@ tests/                     Automated application and LLM tests
 
 ## 9. Continuous integration and deployment validation
 
-The GitHub Actions test workflow installs `requirements.txt` and `requirements-dev.txt`, then runs `pytest -q` on pushes and pull requests. A green test workflow is a prerequisite for treating the code change as validated; it does not replace live Vercel, Supabase, browser-microphone, or external-provider checks.
+The GitHub Actions test workflow installs `requirements.txt` and `requirements-dev.txt`, then runs `pytest -q` on pushes and pull requests. The implementation commit `c45eb06c7bd86201ae1c081578904ae5939f9684` passed this workflow. A green test workflow does not replace live Upstash, Vercel, Supabase, browser-microphone, or external-provider checks.
 
 ## 10. Deployment and validation status
 
