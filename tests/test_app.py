@@ -203,3 +203,33 @@ def test_menu_discover_metrics(client, auth):
     m = client.get("/api/metrics", headers=headers).json()
     assert m["counters"].get("chat.turns", 0) >= 0 and "timings_ms" in m
     assert client.get("/api/metrics").status_code == 401
+
+
+def test_vercel_rewrite_restores_original_path_and_query():
+    from api.index import restore_vercel_path
+
+    scope = {
+        "path": "/api/index",
+        "raw_path": b"/api/index",
+        "query_string": b"__path=%2Fstatic%2Fcss%2Fstyle.css&cache=1",
+    }
+    restore_vercel_path(scope)
+
+    assert scope["path"] == "/static/css/style.css"
+    assert scope["raw_path"] == b"/static/css/style.css"
+    assert scope["query_string"] == b"cache=1"
+
+
+def test_vercel_rewrite_restores_root_path():
+    from api.index import restore_vercel_path
+
+    scope = {
+        "path": "/api/index",
+        "raw_path": b"/api/index",
+        "query_string": b"__path=%2F",
+    }
+    restore_vercel_path(scope)
+
+    assert scope["path"] == "/"
+    assert scope["raw_path"] == b"/"
+    assert scope["query_string"] == b""
