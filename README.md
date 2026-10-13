@@ -63,7 +63,11 @@ Database initialization currently occurs at application startup. A formal migrat
 | `GET /api/discover/places`, `/recipes`, `/buzz` | Optional external discovery sources |
 | `GET /api/health`, `GET /api/metrics` | Health and metrics |
 
-## 5. Current limitations
+## 5. Conversational discovery
+
+Ask BiteVoice to **"find restaurants near Pune"**, **"find recipes for paneer"**, or **"what's trending on Reddit about biryani"**. These requests use the configured Google Places/Yelp, Spoonacular, and Reddit adapters. If a provider credential is missing, the chat responds with a setup message and normal ordering remains available. External results are suggestions, not confirmed menu inventory or availability.
+
+## 6. Current limitations
 
 - The local menu is sourced from `api/data/menu.json`; a live restaurant menu/order provider is not yet connected.
 - Discovery wrappers exist, but live provider calls require valid credentials and have not been verified in a deployed environment.

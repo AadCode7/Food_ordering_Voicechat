@@ -31,7 +31,10 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 ## Next implementation steps
 
 - [ ] Add an optional shared Redis-compatible cache and distributed rate limiter with a safe local fallback
-- [ ] Integrate external discovery results into conversational recommendations without blocking core ordering
+- [x] Route conversational restaurant, recipe, and food-discussion requests to the existing Google Places, Yelp, Spoonacular, and Reddit adapters
+- [x] Run Google Places and Yelp lookups concurrently; deduplicate restaurant names and gracefully handle missing provider credentials
+- [x] Add parser and mocked chat-flow tests for the three discovery intents
+- [ ] Verify live external-provider calls and tune query extraction using real examples
 - [ ] Review LLM provider configuration and remove dependence on providers whose free access is unreliable
 - [ ] Add tests for provider failures, cache fallback, cross-user/session isolation, and discovery behavior
 - [ ] Add a database migration workflow and production configuration validation
@@ -39,6 +42,6 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 
 ## Validation status
 
-- The codebase and documentation were inspected through GitHub.
-- Automated tests have **not** been executed in this work session; do not interpret prior repository notes as a fresh test run.
+- The codebase was inspected and changes were committed through GitHub.
+- Discovery parser and chat-flow tests were added, but automated tests have **not** been executed in this work session; do not interpret test definitions as passing results.
 - Live Vercel deployment, Supabase connectivity, real third-party API calls, and browser microphone behavior have not been verified here.

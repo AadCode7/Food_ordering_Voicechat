@@ -1,7 +1,7 @@
 import uuid
 
 from utils import nlp
-from api.services import menu_service, recommend_service
+from api.services import external_apis, menu_service, recommend_service
 
 
 def say(client, headers, sid, text):
@@ -69,6 +69,9 @@ def test_nlp_parsing():
     assert nlp.parse("place my order").intent == "place_order"
     assert nlp.parse("yes").intent == "confirm"
     assert nlp.parse("remove the naan").intent == "remove_item"
+    assert nlp.parse("find restaurants near Pune").intent == "discover_places"
+    assert nlp.parse("find recipes for paneer").intent == "find_recipes"
+    assert nlp.parse("what's trending on Reddit about biryani").intent == "food_buzz"
 
 
 def test_menu_matching():
@@ -131,6 +134,43 @@ def test_recommend_and_menu_and_unknown(client, auth):
     assert r["intent"] == "chitchat" and r["reply"]
     assert say(client, headers, sid, "zzz add flying carpet")["cart"] == []
 
+
+
+
+def test_conversational_discovery_uses_provider_results(client, auth, monkeypatch):
+    headers, _ = auth
+    sid = uuid.uuid4().hex
+
+    monkeypatch.setattr(external_apis, "google_places", lambda query, limit=5: {
+        "source": "google_places", "available": True,
+        "results": [{"name": "Sushi Place", "rating": 4.5, "address": "Pune"}],
+    })
+    monkeypatch.setattr(external_apis, "yelp", lambda term, location, limit=5: {
+        "source": "yelp", "available": True,
+        "results": [
+            {"name": "Sushi Place", "rating": 4.5, "address": "Pune"},
+            {"name": "Noodle Spot", "rating": 4.2, "address": "Pune"},
+        ],
+    })
+    monkeypatch.setattr(external_apis, "spoonacular", lambda query, limit=5: {
+        "source": "spoonacular", "available": True,
+        "results": [{"title": "Paneer Tikka"}, {"title": "Paneer Curry"}],
+    })
+    monkeypatch.setattr(external_apis, "reddit", lambda query, subreddit="IndianFood", limit=5: {
+        "source": "reddit", "available": True,
+        "results": [{"title": "Favourite biryani places", "url": "https://www.reddit.com/r/IndianFood/example"}],
+    })
+
+    places = say(client, headers, sid, "find restaurants near Pune")
+    assert places["intent"] == "discover_places"
+    assert "Sushi Place" in places["reply"] and "Noodle Spot" in places["reply"]
+    assert places["reply"].count("Sushi Place") == 1
+
+    recipes = say(client, headers, sid, "find recipes for paneer")
+    assert recipes["intent"] == "find_recipes" and "Paneer Tikka" in recipes["reply"]
+
+    buzz = say(client, headers, sid, "what's trending on Reddit about biryani")
+    assert buzz["intent"] == "food_buzz" and "Favourite biryani places" in buzz["reply"]
 
 def test_sessions_are_isolated(client, auth):
     headers, _ = auth

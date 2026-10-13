@@ -64,6 +64,8 @@ Configuration is loaded from environment variables, with `.env` used only for lo
 
 `api/services/external_apis.py` contains optional adapters for Google Places, Yelp Fusion, Spoonacular, and Reddit. `api/routes/discover.py` exposes authenticated discovery endpoints. Calls are bounded by timeouts, cached locally, and fail soft when credentials are absent or upstream services fail. Real credentials and production calls have not yet been verified. Results from external sources must be treated as recommendations, not as authoritative menu inventory or guaranteed availability.
 
+Conversational discovery intents are routed by deterministic NLP before generic recommendations: restaurant queries call Google Places and Yelp concurrently, recipe queries call Spoonacular, and food-trend queries call Reddit. The integrations are optional, bounded by the existing adapter timeouts/cache, and return a graceful setup message when credentials are missing. Results are summarized in chat and are not treated as verified inventory, current opening hours, or guaranteed availability.
+
 ## 7. Monitoring
 
 - JSON request/application logs include request IDs.
