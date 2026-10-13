@@ -35,7 +35,9 @@ _Running summary so context can be carried forward. Last updated: 2026-10-13._
 - [x] Run Google Places and Yelp lookups concurrently; deduplicate restaurant names and gracefully handle missing provider credentials
 - [x] Add parser and mocked chat-flow tests for the three discovery intents
 - [ ] Verify live external-provider calls and tune query extraction using real examples
-- [ ] Review LLM provider configuration and remove dependence on providers whose free access is unreliable
+- [ ] Verify local Ollama and a chosen OpenAI-compatible provider against the configured model IDs
+- [x] Remove Hugging Face from the configured LLM path; default to rule-based operation and support local Ollama or an explicitly configured OpenAI-compatible endpoint
+- [ ] Verify a chosen hosted provider's current model IDs, rate limits, and availability before enabling it
 - [ ] Add tests for provider failures, cache fallback, cross-user/session isolation, and discovery behavior
 - [ ] Add a database migration workflow and production configuration validation
 - [ ] Run the automated test suite and verify the deployed Vercel + Supabase setup

@@ -1,9 +1,7 @@
-"""Open-source LLM access (Qwen primary, Mistral fallback) through an OpenAI-compatible API.
+"""Optional LLM access through Ollama or an explicitly configured OpenAI-compatible endpoint.
 
-Providers (all free / open source):
-  * hf     - Hugging Face serverless inference (router.huggingface.co/v1) with a free token
-  * ollama - run the models locally with Ollama (http://localhost:11434/v1)
-No proprietary model is used. If nothing is configured the app still works, rule-based.
+The app defaults to deterministic rules. Hosted provider pricing, free-tier limits, and model
+availability are provider-specific and must be checked before enabling the integration.
 """
 from __future__ import annotations
 
@@ -31,8 +29,8 @@ _failures = 0
 def _endpoint() -> tuple[str, dict] | None:
     if settings.llm_provider == "ollama":
         return settings.ollama_base_url, {}
-    if settings.llm_provider == "hf" and settings.llm_enabled:
-        return settings.hf_base_url, {"Authorization": f"Bearer {settings.hf_token}"}
+    if settings.llm_provider == "openai_compatible" and settings.llm_enabled:
+        return settings.llm_base_url, {"Authorization": f"Bearer {settings.llm_api_key}"}
     return None
 
 

@@ -51,8 +51,8 @@ class Settings:
     access_token_minutes: int
     database_url: str
     llm_provider: str
-    hf_token: str
-    hf_base_url: str
+    llm_api_key: str
+    llm_base_url: str
     ollama_base_url: str
     llm_model_primary: str
     llm_model_fallback: str
@@ -78,8 +78,8 @@ class Settings:
     def llm_enabled(self) -> bool:
         if self.llm_provider == "ollama":
             return True
-        if self.llm_provider == "hf":
-            return is_real_key(self.hf_token)
+        if self.llm_provider == "openai_compatible":
+            return is_real_key(self.llm_api_key) and bool(self.llm_base_url)
         return False
 
     @property
@@ -97,8 +97,8 @@ def load_settings() -> Settings:
         access_token_minutes=_int("ACCESS_TOKEN_MINUTES", 720),
         database_url=_str("DATABASE_URL", "sqlite:///./local.db"),
         llm_provider=_str("LLM_PROVIDER", "none").lower(),
-        hf_token=_str("HF_TOKEN"),
-        hf_base_url=_str("HF_BASE_URL", "https://router.huggingface.co/v1").rstrip("/"),
+        llm_api_key=_str("LLM_API_KEY"),
+        llm_base_url=_str("LLM_BASE_URL").rstrip("/"),
         ollama_base_url=_str("OLLAMA_BASE_URL", "http://localhost:11434/v1").rstrip("/"),
         llm_model_primary=_str("LLM_MODEL_PRIMARY", "Qwen/Qwen2.5-7B-Instruct"),
         llm_model_fallback=_str("LLM_MODEL_FALLBACK", "mistralai/Mistral-7B-Instruct-v0.3"),

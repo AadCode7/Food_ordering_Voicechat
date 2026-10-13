@@ -40,7 +40,7 @@ Open http://localhost:8000, create an account, allow microphone access in a supp
 
 ## 2. LLM configuration
 
-The rule-based parser and ordering flow work without an LLM. For local model inference, install Ollama separately and configure `LLM_PROVIDER=ollama`, `OLLAMA_BASE_URL`, and the model names in `.env`. Use `LLM_PROVIDER=none` for deterministic rule-based operation. Hosted inference providers must be configured explicitly and tested against their current model availability and usage limits before deployment; no provider's free tier is assumed to be unlimited.
+The rule-based parser and ordering flow work without an LLM. Use `LLM_PROVIDER=none` for deterministic operation or install Ollama locally and set `LLM_PROVIDER=ollama`. An optional hosted provider can be configured with `LLM_PROVIDER=openai_compatible`, `LLM_BASE_URL`, `LLM_API_KEY`, and model names supported by that provider. Hugging Face is not used by this configuration. Check current provider terms, model availability, and rate limits before enabling hosted inference; no free tier is assumed to be unlimited.
 
 ## 3. Deploy on Vercel + Supabase
 

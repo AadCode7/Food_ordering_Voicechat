@@ -16,7 +16,7 @@ browser speechSynthesis <- reply         request ID, logs, metrics              
                                       local Ollama or explicitly configured provider
 ```
 
-The browser sends recognized text, not microphone audio. Ordering and dietary constraints are enforced by deterministic backend code rather than being delegated to an LLM.
+The browser sends recognized text, not microphone audio. Ordering and dietary constraints are enforced by deterministic backend code rather than being delegated to an LLM. The optional LLM path supports local Ollama or a configured OpenAI-compatible endpoint; provider-specific free-tier availability is not guaranteed.
 
 ## 2. LangGraph agent
 
@@ -47,7 +47,7 @@ The full chat transcript is not stored. Persistent memory is limited to profile 
 4. Protected endpoints validate the token and load the user; invalid tokens return 401.
 5. In-process rate limits currently protect authentication and chat routes.
 
-Configuration is loaded from environment variables, with `.env` used only for local development. `.env.example` is the committed template; real `.env` files and credentials must not be committed. Production must use a unique secret and environment-specific database credentials. The repository's previously tracked `.env` duplicated the placeholder template and is being removed from version control.
+Configuration is loaded from environment variables, with `.env` used only for local development. `.env.example` is the committed template; real `.env` files and credentials must not be committed. Production must use a unique secret and environment-specific database credentials. The repository's previously tracked `.env` duplicated the placeholder template and has been removed from version control. LLM providers are disabled by default; supported options are local Ollama or a caller-configured OpenAI-compatible endpoint. Hugging Face is not used.
 
 ## 5. Latency, token use, and peak traffic
 
