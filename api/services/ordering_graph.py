@@ -221,7 +221,7 @@ def _discovery_query(message: str, intent: str) -> str:
     text = re.sub(r"\b(?:in|near|around)\s+(?:me|my area|here|[a-z][a-z\s,-]{1,50})$", " ", text)
     patterns = (
         r"\b(?:what are people saying|can you find|show me|search for|"
-        r"find|search|show|look for|recommend|please|tell me|what are|what is|any|good|best|"
+        r"find|search|show|look for|recommend|please|tell me|what are|what is|what'?s|whats|on|is|the|any|good|best|"
         r"nearby|near me|around me|in my area|restaurants?|food places?|places to eat|food spots|"
         r"where can i eat|recipes?|how do i cook|how to cook|cooking ideas|reddit|trending|"
         r"food buzz|popular discussions|about|for|of|in)\b"
